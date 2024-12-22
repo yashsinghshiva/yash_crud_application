@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 from datetime import datetime
 
 app = Flask(__name__)
@@ -56,6 +56,14 @@ def delete_post(post_id):
     # Remove the post with the matching ID
     user_posts = [post for post in user_posts if post['id'] != post_id]
     return redirect(url_for('view_posts'))  # Redirect to the view_posts route
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    # Return the health status of the application
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
